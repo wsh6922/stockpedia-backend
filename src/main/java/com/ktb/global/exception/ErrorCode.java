@@ -47,8 +47,12 @@ public enum ErrorCode {
 
     COMMENT_UPDATE_ACCESS_FORBIDDEN(HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value(), "댓글 수정 권한이 없습니다."),
 
-    COMMENT_DELETE_ACCESS_FORBIDDEN(HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value(), "댓글 삭제 권한이 없습니다.");
+    COMMENT_DELETE_ACCESS_FORBIDDEN(HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value(), "댓글 삭제 권한이 없습니다."),
 
+
+    ALREADY_LIKED(HttpStatus.CONFLICT, HttpStatus.CONFLICT.value(), "이미 좋아요를 누른 게시글입니다."),
+
+    NOT_LIKED_YET(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value(), "좋아요를 누르지 않은 게시글입니다.");
 
     private final HttpStatus status;
 

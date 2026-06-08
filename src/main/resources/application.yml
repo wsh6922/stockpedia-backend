@@ -18,3 +18,9 @@ spring:
         use_sql_comments: true
     show-sql: true
     open-in-view: true # false
+
+  servlet:
+    multipart:
+      enabled: true # 멀티파트 처리 (기본 true)
+      max-file-size: 2MB # 파일 1개 최대 크기 (기본 2MB)
+      max-request-size: 10MB # 요청 전체 합 (기본 10MB)

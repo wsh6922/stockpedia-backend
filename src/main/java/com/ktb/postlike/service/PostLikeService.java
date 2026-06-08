@@ -30,10 +30,13 @@ public class PostLikeService {
 
         boolean isLike = postLikeRepository.existsByPostIdAndMemberId(postId, currentMemberId);
 
-        if (!isLike) {
-            postLikeRepository.save(postId, currentMemberId);
-            postRepository.incrementLikeCount(postId);
+
+        if (isLike) {
+            throw new BusinessException(ErrorCode.ALREADY_LIKED);
         }
+
+        postLikeRepository.save(postId, currentMemberId);
+        postRepository.incrementLikeCount(postId);
 
         return new PostLikeResponse(postId,
                 currentMemberId,
@@ -52,10 +55,12 @@ public class PostLikeService {
 
         boolean isLike = postLikeRepository.existsByPostIdAndMemberId(postId, currentMemberId);
 
-        if (isLike) {
-            postLikeRepository.delete(postId, currentMemberId);
-            postRepository.decrementLikeCount(postId);
+        if (!isLike) {
+            throw new BusinessException(ErrorCode.NOT_LIKED_YET);
         }
+
+        postLikeRepository.delete(postId, currentMemberId);
+        postRepository.decrementLikeCount(postId);
 
         return new PostLikeResponse(postId,
                 currentMemberId,

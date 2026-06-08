@@ -1,4 +1,4 @@
-package com.ktb.global.file;
+package com.ktb.file;
 
 
 import lombok.Data;

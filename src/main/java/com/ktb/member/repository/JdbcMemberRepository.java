@@ -122,7 +122,7 @@ public class JdbcMemberRepository implements MemberRepository {
      * @param id id 존재 여부 검사
      */
     @Override
-    public boolean existsById(Long id) {
+    public boolean      existsById(Long id) {
 
         String sql = "select count(*) from member where id = ?";
 

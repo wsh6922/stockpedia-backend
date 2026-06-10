@@ -52,7 +52,14 @@ public enum ErrorCode {
 
     ALREADY_LIKED(HttpStatus.CONFLICT, HttpStatus.CONFLICT.value(), "이미 좋아요를 누른 게시글입니다."),
 
-    NOT_LIKED_YET(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value(), "좋아요를 누르지 않은 게시글입니다.");
+    NOT_LIKED_YET(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value(), "좋아요를 누르지 않은 게시글입니다."),
+
+
+    FILE_REQUIRED(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), "파일을 첨부해주세요."),
+
+    INVALID_FILE_NAME(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), "유효하지 않은 파일명입니다.")
+
+    ;
 
     private final HttpStatus status;
 

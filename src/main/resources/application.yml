@@ -2,15 +2,17 @@ spring:
   application:
     name: KTB
 
+
   datasource:
     url: jdbc:mysql://localhost:3307/ktb
     username: root
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+
   jpa:
     hibernate:
-      ddl-auto: create # none, validate, update, create, create-drop
+      ddl-auto: create          # none, validate, update, create, create-drop
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
@@ -19,8 +21,10 @@ spring:
     show-sql: true
     open-in-view: true # false
 
+
   servlet:
     multipart:
-      enabled: true # 멀티파트 처리 (기본 true)
-      max-file-size: 2MB # 파일 1개 최대 크기 (기본 2MB)
-      max-request-size: 10MB # 요청 전체 합 (기본 10MB)
+      enabled: true             # 멀티파트 처리 (기본 true)
+      max-file-size: 4MB        # 파일 1개 최대 크기 (기본 2MB)
+      max-request-size: 10MB    # 요청 전체 합 (기본 10MB)
+      resolve-lazily: true      # multipart 파싱 지연 처리 (선택)

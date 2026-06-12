@@ -1,9 +1,9 @@
 package com.ktb.comment.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.ktb.global.entity.SoftDeleteEntity;
+import com.ktb.member.domain.Member;
+import com.ktb.post.domain.Post;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,23 +12,34 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
+// @AllArgsConstructor
 @Entity
-public class Comment {
+@Table(name = "comment")
+public class Comment extends SoftDeleteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long postId;
+    @ManyToOne
+    @JoinColumn(name = "post_id", nullable = false, updatable = false)
+    private Post post;
 
-    private Long memberId;
+    @ManyToOne
+    @JoinColumn(name = "member_id", nullable = false, updatable = false)
+    private Member member;
 
+    @Column(name = "content", nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    private LocalDateTime createdAt;
 
-    private LocalDateTime updatedAt;
+    public Comment(Post post, Member member, String content) {
+        this.post = post;
+        this.member = member;
+        this.content = content;
+    }
 
-    private LocalDateTime deletedAt;
+    public void update(String content) {
+        this.content = content;
+    }
 }

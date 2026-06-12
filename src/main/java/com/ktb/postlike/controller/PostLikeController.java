@@ -1,8 +1,7 @@
 package com.ktb.postlike.controller;
 
-import com.ktb.global.utils.ApiResponse;
+import com.ktb.global.response.ApiResponse;
 import com.ktb.postlike.dto.PostLikeResponse;
-import com.ktb.postlike.repository.PostLikeRepository;
 import com.ktb.postlike.service.PostLikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

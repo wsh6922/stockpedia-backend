@@ -2,6 +2,8 @@ package com.ktb.post.service;
 
 import com.ktb.global.exception.BusinessException;
 import com.ktb.global.exception.ErrorCode;
+import com.ktb.member.domain.Member;
+import com.ktb.member.repository.MemberRepository;
 import com.ktb.member.service.MemberService;
 import com.ktb.post.domain.Post;
 import com.ktb.post.repository.PostRepository;
@@ -11,29 +13,32 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.file.AccessDeniedException;
-
 @Service
 @RequiredArgsConstructor
 public class PostService {
 
     private final PostRepository postRepository;
+
+    private final MemberRepository memberRepository;
+
     private final MemberService memberService;
 
     @Transactional
     public Post createPost(Long currentMemberId, PostRequest.CreatePostRequest pc) {
 
+        Member member = memberRepository.findMemberById(currentMemberId);
+
+        if (member == null) {
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
+        }
+
         Post post = new Post(
-                null,
-                currentMemberId,
+                member,
                 pc.getTitle(),
                 pc.getContent(),
-                null,
-                null,
-                null,
-                null,
-                null,
-                null
+                0L,
+                0L,
+                0L
         );
 
         return postRepository.save(post);
@@ -42,15 +47,15 @@ public class PostService {
     @Transactional
     public PostResponse.DetailPostResponse getPostDetail(Long postId, Long currentMemberId) {
 
-        Post post = postRepository.findByPostId(postId);
+        Post post = postRepository.findPostById(postId);
 
         if (post == null) {
             throw new BusinessException(ErrorCode.POST_NOT_FOUND);
         }
 
-        postRepository.incrementViewCount(postId);
+        post.addView();
 
-        PostResponse.DetailPostResponse response = postRepository.findPostDetailByPostId(postId, currentMemberId);
+        PostResponse.DetailPostResponse response = postRepository.findPostDetailByPostId(post.getId(), currentMemberId);
 
         if (response == null) {
             throw new BusinessException(ErrorCode.POST_NOT_FOUND);
@@ -62,46 +67,36 @@ public class PostService {
     @Transactional
     public PostResponse.UpdatePostResponse updatePost(Long postId, Long currentMemberId, String title, String content) {
 
+        Post post = postRepository.findPostById(postId);
 
-        if (postRepository.findByPostId(postId) == null) {
+        if (post == null) {
             throw new BusinessException(ErrorCode.POST_NOT_FOUND);
         }
 
-        Long id = postRepository.findAuthorIdByPostId(postId);
-
-        if (!id.equals(currentMemberId)) {
+        if (!post.isOwner(currentMemberId)) {
             throw new BusinessException(ErrorCode.POST_UPDATE_ACCESS_FORBIDDEN);
         }
 
-        postRepository.updateById(postId, title, content);
-
-        // updated_at이 필요한가?
-        // 필요하면 재조회
-        // 필요하지 않다면 재조회 없이 응답 디티오에 그냥 담아 컨트롤러로 보낼것
-
-        Post post = postRepository.findByPostId(postId);
+        post.update(title, content);
 
         return new PostResponse.UpdatePostResponse(
                 post.getId(),
                 post.getTitle(),
-                post.getContent(),
-                post.getUpdatedAt()
+                post.getContent()
         );
     }
 
     @Transactional
     public void deletePost(Long postId, Long currentMemberId) {
 
-        Post post = postRepository.findByPostId(postId);
+        Post post = postRepository.findPostById(postId);
 
         if (post == null) {
             throw new BusinessException(ErrorCode.POST_NOT_FOUND);
         }
 
-        Long id = postRepository.findAuthorIdByPostId(postId);
-
-        if (!id.equals(currentMemberId)) {
-            throw new BusinessException(ErrorCode.POST_DELETE_ACCESS_FORBIDDEN);
+        if (!post.isOwner(currentMemberId)) {
+            throw new BusinessException(ErrorCode.POST_UPDATE_ACCESS_FORBIDDEN);
         }
 
         postRepository.deleteById(postId);

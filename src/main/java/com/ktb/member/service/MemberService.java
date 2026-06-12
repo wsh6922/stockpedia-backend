@@ -6,12 +6,12 @@ import com.ktb.member.domain.Member;
 import com.ktb.member.repository.MemberRepository;
 import com.ktb.member.dto.MemberRequest;
 import com.ktb.member.dto.MemberResponse;
+import com.ktb.profileImage.domain.ProfileImage;
+import com.ktb.profileImage.repository.ProfileImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.NoSuchElementException;
 
 /**
  * @Service: 스프링 빈 등록, 비즈니스 로직 계층임을 명시(기능은 @Component와 동일, 의미 구분용)
@@ -23,6 +23,8 @@ import java.util.NoSuchElementException;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+
+    private final ProfileImageRepository profileImageRepository;
 
     private final PasswordEncoder encoder;
 
@@ -63,15 +65,28 @@ public class MemberService {
 
         String password = encoder.encode(ms.getPassword());
 
-        Member member = new Member(
-                null,
-                ms.getEmail(),
-                password, // 암호화 된 password 저장
-                ms.getNickname(),
-                null,
-                null);
+//        Member member = new Member(
+//                null,
+//                ms.getEmail(),
+//                password, // 암호화 된 password 저장
+//                ms.getNickname(),
+//                null,
+//                null);
 
-        return memberRepository.save(member);
+        Member member = new Member(ms.getEmail(), password, ms.getNickname());
+        Member savedMember = memberRepository.save(member);
+
+        if (ms.getUploadFile() != null) {
+            ProfileImage profileImage = new ProfileImage(
+                    savedMember,
+                    ms.getUploadFile().getOriginalName(),
+                    ms.getUploadFile().getStoredPath(),
+                    ms.getUploadFile().getS3Key());
+
+            profileImageRepository.save(profileImage);
+        }
+
+        return savedMember;
     }
 
     /**
@@ -97,7 +112,7 @@ public class MemberService {
         Member member = memberRepository.findByEmail(email);
 
         if (member == null) {
-          throw new BusinessException(ErrorCode.LOGIN_FAILED);
+            throw new BusinessException(ErrorCode.LOGIN_FAILED);
         }
 
         if (!encoder.matches(password, member.getPassword())) {
@@ -129,15 +144,13 @@ public class MemberService {
          * 없으면 예외 처리
          * 있으면 응답 DTO에 담아 컨트롤러로 반환
          */
-        Member member = memberRepository.findById(id);
+        MemberResponse.ProfileResponse member = memberRepository.findMemberProfileById(id);
 
         if (member == null) {
             throw new BusinessException(ErrorCode.USER_NOT_FOUND);
         }
 
-        return new MemberResponse.ProfileResponse(
-                member.getId(), member.getNickname(), member.getEmail()
-        );
+        return member;
     }
 
     // TODO: 파일처리가 되는 즉시 프로필 수정 필요
@@ -148,7 +161,7 @@ public class MemberService {
      * 데이터를 수정하니 readonly는 디폴트인 false
      */
     @Transactional
-    public void updatePassword(Long id, MemberRequest.UpdatePwRequest mu, Long currentMemberId) {
+    public void changePassword(Long id, MemberRequest.UpdatePwRequest mu, Long currentMemberId) {
 
         /**
          * 비밀번호를 수정하는 updatePassword
@@ -170,11 +183,11 @@ public class MemberService {
             throw new BusinessException(ErrorCode.USER_UPDATE_ACCESS_FORBIDDEN);
         }
 
-        if(!mu.getPassword().equals(mu.getPasswordCheck())) {
+        if (!mu.getPassword().equals(mu.getPasswordCheck())) {
             throw new BusinessException(ErrorCode.MISMATCH_PASSWORD);
         }
 
-        Member member = memberRepository.findById(id);
+        Member member = memberRepository.findMemberById(id);
 
         if (member == null) {
             // Spring Data JPA 사용시 EntityNotFoundException로 변경
@@ -182,7 +195,7 @@ public class MemberService {
         }
 
         String newPassword = encoder.encode(mu.getPassword());
-        memberRepository.updatePasswordById(member.getId(), newPassword);
+        member.changePassword(newPassword);
     }
 
     /**
@@ -210,12 +223,13 @@ public class MemberService {
             throw new BusinessException(ErrorCode.USER_DELETE_ACCESS_FORBIDDEN);
         }
 
-        Member member = memberRepository.findById(id);
+        Member member = memberRepository.findMemberById(id);
 
         if (member == null) {
             throw new BusinessException(ErrorCode.USER_NOT_FOUND);
         }
 
         memberRepository.deleteById(member.getId());
+        // jpaMemberRepository.delete(member);
     }
 }

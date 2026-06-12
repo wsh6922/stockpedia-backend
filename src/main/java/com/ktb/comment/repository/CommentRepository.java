@@ -1,17 +1,10 @@
 package com.ktb.comment.repository;
 
 import com.ktb.comment.domain.Comment;
-import com.ktb.comment.dto.CommentResponse;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CommentRepository {
+public interface CommentRepository extends JpaRepository<Comment, Long>, CommentRepositoryCustom {
 
-    CommentResponse.CreateCommentResponse save(Comment comment);
 
-    Comment findById(Long commentId);
-
-    CommentResponse.CreateCommentResponse findResponseForCreatedComment(Long commentId);
-
-    void updateById(Long commentId, String content);
-
-    void deleteById(Long commentId);
+    Comment findCommentById(Long commentId);
 }

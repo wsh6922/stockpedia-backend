@@ -1,4 +1,4 @@
-package com.ktb.global.utils;
+package com.ktb.global.response;
 
 public record ApiResponse<T>(boolean success, String code, String message, T data) {
 

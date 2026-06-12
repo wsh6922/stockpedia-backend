@@ -1,26 +1,17 @@
 package com.ktb.member.repository;
 
 import com.ktb.member.domain.Member;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
-public interface MemberRepository {
-
-    Member save(Member member);
-
-    Member findById(Long id);
+public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
 
     Member findByEmail(String email);
 
-    List<Member> findAll();
-
-    boolean existsById(Long id);
+    Member findMemberById(Long id);
 
     boolean existsByEmail(String email);
 
     boolean existsByNickname(String nickname);
-
-    void updatePasswordById(Long id, String password);
-
-    void deleteById(Long id);
 }
+
+

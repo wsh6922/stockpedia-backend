@@ -1,7 +1,6 @@
 package com.ktb.global.exception;
 
-import com.ktb.global.utils.ApiResponse;
-import jakarta.validation.constraints.Max;
+import com.ktb.global.response.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

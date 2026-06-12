@@ -1,6 +1,8 @@
 package com.ktb.member.dto;
 
 
+import com.ktb.file.dto.UploadFile;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 
@@ -22,6 +24,9 @@ public class MemberRequest {
         @NotBlank
         @Size(max = 10)
         private String nickname;
+
+        @Valid
+        private UploadFile uploadFile;
     }
 
     @Getter

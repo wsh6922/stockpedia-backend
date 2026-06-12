@@ -121,6 +121,7 @@ public class LocalFileStorage implements FileStorage {
             // 실제 파일 저장
             // Files.copy: NIO 표준, REPLACE_EXISTING으로 덮어쓰기를 명시적으로 선언 가능
             // transferTo: Spring MultipartFile 편의 메서드, 짧지만 옵션 지정 불가
+            // transferTo안에서 this.getInputStream() 호출
             Files.copy(file.getInputStream(), targetFile, StandardCopyOption.REPLACE_EXISTING);
             // file.transferTo(filePath);
 

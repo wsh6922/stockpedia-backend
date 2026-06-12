@@ -1,0 +1,45 @@
+package com.ktb.comment.repository;
+
+import com.ktb.comment.domain.QComment;
+import com.ktb.comment.dto.CommentResponse;
+import com.ktb.member.domain.QMember;
+import com.ktb.post.domain.QPost;
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+
+@Repository
+@RequiredArgsConstructor
+public class CommentRepositoryImpl implements CommentRepositoryCustom {
+
+    private final JPAQueryFactory jpaQueryFactory;
+
+    @Override
+    public CommentResponse.CreateCommentResponse findCommentById(Long commentId, Long memberId) {
+        CommentResponse.CreateCommentResponse result = jpaQueryFactory.select(
+                        Projections.constructor(
+                                CommentResponse.CreateCommentResponse.class,
+                                QComment.comment.id,
+                                QComment.comment.post.id,
+                                QComment.comment.content,
+                                QComment.comment.createdAt,
+                                QPost.post.commentCount,
+                                QComment.comment.member.id.eq(memberId),
+                                Projections.constructor(
+                                        CommentResponse.AuthorResponse.class,
+                                        QMember.member.id,
+                                        QMember.member.nickname
+                                )
+                        ))
+                .from(QComment.comment)
+                .join(QComment.comment.post, QPost.post).on(QComment.comment.post.eq(QPost.post))
+                .join(QComment.comment.member, QMember.member).on(QComment.comment.member.eq(QMember.member))
+                .where(
+                        QComment.comment.id.eq(commentId),
+                        QComment.comment.deletedAt.isNull()
+                )
+                .fetchOne();
+        return result;
+    }
+}

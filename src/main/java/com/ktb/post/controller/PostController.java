@@ -1,7 +1,7 @@
 package com.ktb.post.controller;
 
 
-import com.ktb.global.utils.ApiResponse;
+import com.ktb.global.response.ApiResponse;
 import com.ktb.post.domain.Post;
 import com.ktb.post.service.PostService;
 import com.ktb.post.dto.PostRequest;

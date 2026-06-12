@@ -1,6 +1,6 @@
 package com.ktb.member.controller;
 
-import com.ktb.global.utils.ApiResponse;
+import com.ktb.global.response.ApiResponse;
 import com.ktb.member.domain.Member;
 import com.ktb.member.service.MemberService;
 
@@ -131,7 +131,7 @@ public class MemberController {
          * 경로의 식별자, 요청 DTO, 세션에서 꺼낸 로그인 사용자 id를
          * 응답 본문 없이 204 반환
          */
-        memberService.updatePassword(id, mu, currentMemberId);
+        memberService.changePassword(id, mu, currentMemberId);
 
         return ResponseEntity.noContent().build();
     }

@@ -1,10 +1,12 @@
 package com.ktb.postlike.repository;
 
-public interface PostLikeRepository {
+import com.ktb.postlike.domain.PostLike;
+import com.ktb.postlike.domain.PostLikeId;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-    void save(Long postId, Long currentMemberId);
+public interface PostLikeRepository extends JpaRepository<PostLike, PostLikeId> {
 
-    void delete(Long postId, Long currentMemberId);
+    PostLike findPostLikeById(PostLikeId postLikeId);
 
-    boolean existsByPostIdAndMemberId(Long postId, Long currentMemberId);
+    boolean existsById(PostLikeId postLikeId);
 }

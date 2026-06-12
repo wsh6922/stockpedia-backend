@@ -27,7 +27,7 @@ public class PostResponse {
 
         private String content;
 
-        private LocalDateTime updatedAt;
+        // private LocalDateTime updatedAt;
     }
 
     @Getter
@@ -40,11 +40,11 @@ public class PostResponse {
 
         private String content;
 
-        private int viewCount;
+        private Long viewCount;
 
-        private int likeCount;
+        private Long likeCount;
 
-        private int commentCount;
+        private Long commentCount;
 
         private LocalDateTime createdAt;
 

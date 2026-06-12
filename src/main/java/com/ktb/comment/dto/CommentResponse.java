@@ -21,6 +21,8 @@ public class CommentResponse {
 
         private Long commentCount;
 
+        private Boolean isMine;
+
         private AuthorResponse author;
     }
 
@@ -40,6 +42,6 @@ public class CommentResponse {
 
         private String content;
 
-        private LocalDateTime updateAt;
+        // private LocalDateTime updateAt;
     }
 }

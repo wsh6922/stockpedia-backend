@@ -3,7 +3,7 @@ package com.ktb.comment.controller;
 import com.ktb.comment.dto.CommentRequest;
 import com.ktb.comment.dto.CommentResponse;
 import com.ktb.comment.service.CommentService;
-import com.ktb.global.utils.ApiResponse;
+import com.ktb.global.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

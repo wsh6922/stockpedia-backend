@@ -32,5 +32,7 @@ public class MemberResponse {
         private String nickname;
 
         private String email;
+
+        private String profileImageUrl;
     }
 }

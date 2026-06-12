@@ -2,7 +2,7 @@ package com.ktb.file.controller;
 
 import com.ktb.file.dto.FileResponse;
 import com.ktb.file.service.FileStorage;
-import com.ktb.global.utils.ApiResponse;
+import com.ktb.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

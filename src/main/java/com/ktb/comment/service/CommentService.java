@@ -3,8 +3,8 @@ package com.ktb.comment.service;
 import com.ktb.comment.domain.Comment;
 import com.ktb.comment.dto.CommentResponse;
 import com.ktb.comment.repository.CommentRepository;
-import com.ktb.global.exception.BusinessException;
-import com.ktb.global.exception.ErrorCode;
+import com.ktb.global.utils.exception.BusinessException;
+import com.ktb.global.utils.exception.ErrorCode;
 import com.ktb.member.domain.Member;
 import com.ktb.member.repository.MemberRepository;
 import com.ktb.post.domain.Post;
@@ -46,7 +46,7 @@ public class CommentService {
                 content
         );
 
-        post.addComment();
+        postRepository.incrementCommentCount(post.getId());
 
         Comment result = commentRepository.save(comment);
 
@@ -101,6 +101,6 @@ public class CommentService {
 
         commentRepository.deleteById(commentId);
 
-        post.removeComment();
+        postRepository.decrementCommentCount(post.getId());
     }
 }

@@ -1,4 +1,4 @@
-package com.ktb.global.exception;
+package com.ktb.global.utils.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -34,6 +34,9 @@ public enum ErrorCode {
     USER_UPDATE_ACCESS_FORBIDDEN(HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value(), "회원 수정 권한이 없습니다."),
 
     USER_DELETE_ACCESS_FORBIDDEN(HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value(), "회원 삭제 권한이 없습니다."),
+
+    USER_UPDATE_EMPTY(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), "수정할 정보가 없습니다."),
+
 
 
     POST_NOT_FOUND(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value(), "존재하지 않는 게시글입니다."),

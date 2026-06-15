@@ -1,14 +1,12 @@
 package com.ktb.postlike.domain;
 
-import com.ktb.global.entity.CreatedEntity;
+import com.ktb.global.utils.entity.CreatedEntity;
 import com.ktb.member.domain.Member;
 import com.ktb.post.domain.Post;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 /**
  * @IdClass(PostLikeId.class) 복합 PK(여러 컬럼을 묶어 식별자로 쓰는 경우)를 표현하는 JPA 표준 방식 중 하나

@@ -1,4 +1,4 @@
-package com.ktb.web.auth;
+package com.ktb.global.auth;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

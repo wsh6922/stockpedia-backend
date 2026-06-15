@@ -1,14 +1,11 @@
 package com.ktb.comment.domain;
 
-import com.ktb.global.entity.SoftDeleteEntity;
+import com.ktb.global.utils.entity.SoftDeleteEntity;
 import com.ktb.member.domain.Member;
 import com.ktb.post.domain.Post;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor

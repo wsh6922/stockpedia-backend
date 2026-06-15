@@ -1,10 +1,8 @@
 package com.ktb.member.domain;
 
-import com.ktb.global.entity.BaseEntity;
+import com.ktb.global.utils.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -55,9 +53,15 @@ public class Member extends BaseEntity {
         this.nickname = nickname;
     }
 
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
+
+    }
+
     public void changePassword(String password) {
         this.password = password;
     }
+
 }
 
 

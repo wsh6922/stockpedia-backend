@@ -1,8 +1,9 @@
     package com.ktb.file.service;
 
-import com.ktb.global.exception.BusinessException;
-import com.ktb.global.exception.ErrorCode;
+import com.ktb.global.utils.exception.BusinessException;
+import com.ktb.global.utils.exception.ErrorCode;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,7 +27,10 @@ public class LocalFileStorage implements FileStorage {
      * 프로필만 저장하는 클래스이니 속성으로 profiles를 가지고 있음
      * 외부에서 매개변수로 받는 구조라면 enum도 고려
      */
-    private static final String BASE_PATH = "uploads";
+    // private static final String BASE_PATH = "uploads";
+
+    @Value("${file.upload-path}")
+    private String basePath;
 
     private Path uploadPath;
 
@@ -67,7 +71,7 @@ public class LocalFileStorage implements FileStorage {
          * /Users/{사용자명}/Documents/KTB/uploads
          *
          */
-        this.uploadPath = Paths.get(BASE_PATH).toAbsolutePath().normalize();
+        this.uploadPath = Paths.get(basePath).toAbsolutePath().normalize();
 
 //        if (!Files.exists(uploadPath)) {
 //            Files.createDirectories(uploadPath);
@@ -125,7 +129,7 @@ public class LocalFileStorage implements FileStorage {
             Files.copy(file.getInputStream(), targetFile, StandardCopyOption.REPLACE_EXISTING);
             // file.transferTo(filePath);
 
-            return "/" + BASE_PATH + "/" + dir + "/" + storedFilename;
+            return "/" + basePath + "/" + dir + "/" + storedFilename;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -146,7 +150,6 @@ public class LocalFileStorage implements FileStorage {
             throw new BusinessException(ErrorCode.INVALID_FILE_NAME);
         }
 
-        // 각각 남겨줘 주석
         int pos = originalFilename.lastIndexOf(".");
         return originalFilename.substring(pos + 1); // 결과 -> png
 

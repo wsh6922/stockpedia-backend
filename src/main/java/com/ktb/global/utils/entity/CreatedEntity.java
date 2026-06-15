@@ -1,4 +1,4 @@
-package com.ktb.global.entity;
+package com.ktb.global.utils.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

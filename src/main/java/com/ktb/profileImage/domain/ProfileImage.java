@@ -1,5 +1,5 @@
 package com.ktb.profileImage.domain;
-import com.ktb.global.entity.BaseEntity;
+import com.ktb.global.utils.entity.BaseEntity;
 import com.ktb.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -30,6 +30,12 @@ public class ProfileImage extends BaseEntity {
 
     public ProfileImage(Member member, String originalName, String storedPath, String s3Key) {
         this.member = member;
+        this.originalName = originalName;
+        this.storedPath = storedPath;
+        this.s3Key = s3Key;
+    }
+
+    public void update(String originalName, String storedPath, String s3Key) {
         this.originalName = originalName;
         this.storedPath = storedPath;
         this.s3Key = s3Key;

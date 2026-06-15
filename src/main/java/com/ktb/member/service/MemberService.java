@@ -1,7 +1,7 @@
 package com.ktb.member.service;
 
-import com.ktb.global.exception.BusinessException;
-import com.ktb.global.exception.ErrorCode;
+import com.ktb.global.utils.exception.BusinessException;
+import com.ktb.global.utils.exception.ErrorCode;
 import com.ktb.member.domain.Member;
 import com.ktb.member.repository.MemberRepository;
 import com.ktb.member.dto.MemberRequest;
@@ -154,6 +154,58 @@ public class MemberService {
     }
 
     // TODO: 파일처리가 되는 즉시 프로필 수정 필요
+    @Transactional
+    public MemberResponse.UpdateProfileResponse changeProfile(Long id, MemberRequest.UpdateProfileRequest mu, Long currentMemberId) {
+        if (!id.equals(currentMemberId)) {
+            throw new BusinessException(ErrorCode.USER_UPDATE_ACCESS_FORBIDDEN);
+        }
+
+        Member member = memberRepository.findMemberById(id);
+
+        if (member == null) {
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        if (mu.getNickname() == null && mu.getUploadFile() == null) {
+            throw new BusinessException(ErrorCode.USER_UPDATE_EMPTY);
+        }
+
+        if (mu.getNickname() != null && !mu.getNickname().equals(member.getNickname())) {
+            if (memberRepository.existsByNickname(mu.getNickname())) {
+                throw new BusinessException(ErrorCode.DUPLICATE_NICKNAME);
+            }
+            member.changeNickname(mu.getNickname());
+        }
+
+
+        String profileImageUrl = null;
+
+        if (mu.getUploadFile() != null) { // 새로운 이미지가 있다는 거임
+            ProfileImage profileImage = profileImageRepository.findByMemberId(member.getId());
+
+            if (profileImage == null) {
+                ProfileImage newImage = new ProfileImage(
+                        member, mu.getUploadFile().getOriginalName(),
+                        mu.getUploadFile().getStoredPath(),
+                        mu.getUploadFile().getS3Key()
+                );
+
+                profileImageRepository.save(newImage);
+                profileImageUrl = newImage.getStoredPath();
+            } else {
+                profileImage.update(mu.getUploadFile().getOriginalName(),
+                        mu.getUploadFile().getStoredPath(),
+                        mu.getUploadFile().getS3Key());
+
+                profileImageUrl = profileImage.getStoredPath();
+            }
+        }
+
+        return new MemberResponse.UpdateProfileResponse(
+                member.getNickname(),
+                profileImageUrl
+        );
+    }
 
     /**
      * @Transactional: 트랜잭션은 all or nothing
@@ -190,7 +242,6 @@ public class MemberService {
         Member member = memberRepository.findMemberById(id);
 
         if (member == null) {
-            // Spring Data JPA 사용시 EntityNotFoundException로 변경
             throw new BusinessException(ErrorCode.USER_NOT_FOUND);
         }
 
@@ -229,7 +280,9 @@ public class MemberService {
             throw new BusinessException(ErrorCode.USER_NOT_FOUND);
         }
 
+        profileImageRepository.deleteByMemberId(member.getId());
+
         memberRepository.deleteById(member.getId());
-        // jpaMemberRepository.delete(member);
+        // memberRepository.delete(member);
     }
 }

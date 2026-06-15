@@ -28,3 +28,6 @@ spring:
       max-file-size: 4MB        # 파일 1개 최대 크기 (기본 2MB)
       max-request-size: 10MB    # 요청 전체 합 (기본 10MB)
       resolve-lazily: true      # multipart 파싱 지연 처리 (선택)
+
+file:
+  upload-path: uploads

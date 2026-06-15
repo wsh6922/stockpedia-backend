@@ -1,7 +1,7 @@
 package com.ktb.post.service;
 
-import com.ktb.global.exception.BusinessException;
-import com.ktb.global.exception.ErrorCode;
+import com.ktb.global.utils.exception.BusinessException;
+import com.ktb.global.utils.exception.ErrorCode;
 import com.ktb.member.domain.Member;
 import com.ktb.member.repository.MemberRepository;
 import com.ktb.member.service.MemberService;
@@ -20,8 +20,6 @@ public class PostService {
     private final PostRepository postRepository;
 
     private final MemberRepository memberRepository;
-
-    private final MemberService memberService;
 
     @Transactional
     public Post createPost(Long currentMemberId, PostRequest.CreatePostRequest pc) {
@@ -53,7 +51,7 @@ public class PostService {
             throw new BusinessException(ErrorCode.POST_NOT_FOUND);
         }
 
-        post.addView();
+        postRepository.incrementViewCount(post.getId());
 
         PostResponse.DetailPostResponse response = postRepository.findPostDetailByPostId(post.getId(), currentMemberId);
 

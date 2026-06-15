@@ -1,6 +1,6 @@
-package com.ktb.global.exception;
+package com.ktb.global.utils.exception;
 
-import com.ktb.global.response.ApiResponse;
+import com.ktb.global.utils.response.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

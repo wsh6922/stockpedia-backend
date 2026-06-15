@@ -1,7 +1,6 @@
 package com.ktb.postImage.domain;
 
-import com.ktb.global.entity.BaseEntity;
-import com.ktb.member.domain.Member;
+import com.ktb.global.utils.entity.BaseEntity;
 import com.ktb.post.domain.Post;
 import jakarta.persistence.*;
 import lombok.Getter;

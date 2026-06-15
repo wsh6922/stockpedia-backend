@@ -1,6 +1,6 @@
 package com.ktb.postlike.controller;
 
-import com.ktb.global.response.ApiResponse;
+import com.ktb.global.utils.response.ApiResponse;
 import com.ktb.postlike.dto.PostLikeResponse;
 import com.ktb.postlike.service.PostLikeService;
 import lombok.RequiredArgsConstructor;

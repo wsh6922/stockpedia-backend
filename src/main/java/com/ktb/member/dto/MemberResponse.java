@@ -1,5 +1,7 @@
 package com.ktb.member.dto;
 
+import com.ktb.file.dto.UploadFile;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -35,4 +37,14 @@ public class MemberResponse {
 
         private String profileImageUrl;
     }
+
+    @Getter
+    @AllArgsConstructor
+    public static class UpdateProfileResponse {
+
+        private String nickname;
+
+        private String profileImageUrl;
+    }
+
 }

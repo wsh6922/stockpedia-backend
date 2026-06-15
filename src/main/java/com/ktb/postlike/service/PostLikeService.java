@@ -1,7 +1,7 @@
 package com.ktb.postlike.service;
 
-import com.ktb.global.exception.BusinessException;
-import com.ktb.global.exception.ErrorCode;
+import com.ktb.global.utils.exception.BusinessException;
+import com.ktb.global.utils.exception.ErrorCode;
 import com.ktb.member.domain.Member;
 import com.ktb.member.repository.MemberRepository;
 import com.ktb.post.domain.Post;
@@ -58,7 +58,7 @@ public class PostLikeService {
 
         postLikeRepository.save(postLike);
 
-        post.addLike();
+        postRepository.incrementLikeCount(post.getId());
 
         return new PostLikeResponse(postId,
                 currentMemberId,
@@ -92,7 +92,7 @@ public class PostLikeService {
         PostLike postLike = postLikeRepository.findPostLikeById(postLikeId);
 
         postLikeRepository.delete(postLike);
-        post.removeLike();
+        postRepository.decrementLikeCount(post.getId());
 
         return new PostLikeResponse(postId,
                 currentMemberId,

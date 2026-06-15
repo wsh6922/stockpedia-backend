@@ -1,4 +1,4 @@
-package com.ktb.global.exception;
+package com.ktb.global.utils.exception;
 
 import lombok.Getter;
 

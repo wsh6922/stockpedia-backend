@@ -1,6 +1,6 @@
 package com.ktb.member.controller;
 
-import com.ktb.global.response.ApiResponse;
+import com.ktb.global.utils.response.ApiResponse;
 import com.ktb.member.domain.Member;
 import com.ktb.member.service.MemberService;
 
@@ -112,6 +112,21 @@ public class MemberController {
                 .status(HttpStatus.OK)
                 .body(ApiResponse.success("회원정보 조회에 성공했습니다.", response));
     }
+
+    @PatchMapping("/users/{id}")
+    public ResponseEntity<ApiResponse<MemberResponse.UpdateProfileResponse>> updateProfile(
+            @PathVariable Long id,
+            @Valid @RequestBody MemberRequest.UpdateProfileRequest mu,
+            @SessionAttribute("loginMember") Long currentMemberId
+    ) {
+        MemberResponse.UpdateProfileResponse response =
+                memberService.changeProfile(id, mu, currentMemberId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiResponse.success("회원정보 변경에 성공했습니다.", response));
+    }
+
 
     @PutMapping("/users/{id}/password")
     public ResponseEntity<Void> updatePassword(

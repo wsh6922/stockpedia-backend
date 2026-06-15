@@ -1,14 +1,11 @@
 package com.ktb.post.domain;
 
-import com.ktb.global.entity.SoftDeleteEntity;
+import com.ktb.global.utils.entity.SoftDeleteEntity;
 import com.ktb.member.domain.Member;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -60,30 +57,6 @@ public class Post extends SoftDeleteEntity {
         this.commentCount = commentCount;
     }
 
-    public void addView() {
-        this.viewCount = this.viewCount + 1;
-    }
-
-    public void addComment() {
-        this.commentCount = this.commentCount + 1;
-    }
-
-    public void removeComment() {
-        if (this.commentCount > 0) {
-            this.commentCount = this.commentCount - 1;
-        }
-    }
-
-    public void addLike() {
-        this.likeCount = this.likeCount + 1;
-    }
-
-    public void removeLike() {
-        if (this.likeCount > 0) {
-            this.likeCount = this.likeCount - 1;
-        }
-    }
-
     public void update(String title, String content) {
         this.title = title;
         this.content = content;
@@ -94,8 +67,6 @@ public class Post extends SoftDeleteEntity {
     }
 
 }
-
-
 
 /**
  * @Column(length = 26)

@@ -40,6 +40,15 @@ public class MemberRequest {
     }
 
     @Getter
+    public static class UpdateProfileRequest {
+
+        @Size(min = 1, max = 10)
+        private String nickname;
+
+        private UploadFile uploadFile;
+    }
+
+    @Getter
     public static class UpdatePwRequest {
 
         @NotBlank

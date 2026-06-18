@@ -59,9 +59,9 @@ public class MemberService {
             throw new BusinessException(ErrorCode.DUPLICATE_NICKNAME);
         }
 
-        if (!ms.getPassword().equals(ms.getPasswordCheck())) {
-            throw new BusinessException(ErrorCode.MISMATCH_PASSWORD);
-        }
+//        if (!ms.getPassword().equals(ms.getPasswordCheck())) {
+//            throw new BusinessException(ErrorCode.MISMATCH_PASSWORD);
+//        }
 
         String password = encoder.encode(ms.getPassword());
 
@@ -284,5 +284,19 @@ public class MemberService {
 
         memberRepository.deleteById(member.getId());
         // memberRepository.delete(member);
+    }
+
+    @Transactional(readOnly = true)
+    public void checkEmail(String email) {
+        if (memberRepository.existsByEmail(email)) {
+            throw new BusinessException(ErrorCode.DUPLICATE_EMAIL);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public void checkNickname(String nickname) {
+        if (memberRepository.existsByNickname(nickname)) {
+            throw new BusinessException(ErrorCode.DUPLICATE_NICKNAME);
+        }
     }
 }

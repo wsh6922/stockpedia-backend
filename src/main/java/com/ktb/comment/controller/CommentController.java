@@ -28,6 +28,24 @@ public class CommentController {
                 .body(ApiResponse.success("댓글이 등록되었습니다.", response));
     }
 
+
+    @GetMapping("/posts/{postId}/comments")
+    public ResponseEntity<ApiResponse<CommentResponse.CommentPageResponse>> getComments(
+            @PathVariable Long postId,
+            @SessionAttribute("loginMember") Long memberId,
+            @RequestParam(required = false) Long cursor,
+            @RequestParam(required = false) Integer limit
+            ) {
+
+        CommentResponse.CommentPageResponse response =
+                commentService.getComments(postId, memberId, cursor, limit);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiResponse.success("댓글 목록 조회에 성공했습니다.", response));
+    }
+
+
     @PutMapping("/posts/{postId}/comments/{commentId}")
     public ResponseEntity<ApiResponse<CommentResponse.UpdateCommentResponse>> updateComment(
             @PathVariable Long postId, @PathVariable Long commentId, @Valid @RequestBody CommentRequest.UpdateCommentRequest cu,

@@ -8,10 +8,13 @@ import com.ktb.global.utils.exception.ErrorCode;
 import com.ktb.member.domain.Member;
 import com.ktb.member.repository.MemberRepository;
 import com.ktb.post.domain.Post;
+import com.ktb.post.dto.PostResponse;
 import com.ktb.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -51,6 +54,32 @@ public class CommentService {
         Comment result = commentRepository.save(comment);
 
         return commentRepository.findCommentById(result.getId(), result.getMember().getId());
+    }
+
+    @Transactional(readOnly = true)
+    public CommentResponse.CommentPageResponse getComments(Long postId, Long memberId, Long cursor, Integer limit) {
+
+        if (limit == null) {
+            limit = 10;
+        }
+        if (limit < 1 || limit > 30) {
+            throw new BusinessException(ErrorCode.INVALID_PAGE_SIZE);
+        }
+
+        List<CommentResponse.CommentResult> comments =
+                commentRepository.findCommentResultByCursor(postId, memberId, cursor, limit + 1);
+
+        // size보다 많이 왔으면 다음 페이지 있음
+        boolean hasNext = comments.size() > limit;
+
+        if (hasNext) {
+            comments = comments.subList(0, limit);
+        }
+
+        // 다음 cursor = 마지막 글 id (없으면 null)
+        Long nextCursor = hasNext ? comments.get(comments.size() - 1).getCommentId() : null;
+
+        return new CommentResponse.CommentPageResponse(comments, nextCursor, hasNext);
     }
 
     @Transactional

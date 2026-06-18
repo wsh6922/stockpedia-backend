@@ -3,12 +3,18 @@ package com.ktb.post.repository;
 import com.ktb.member.domain.QMember;
 import com.ktb.post.domain.QPost;
 import com.ktb.post.dto.PostResponse;
-import com.querydsl.core.NonUniqueResultException;
+import com.ktb.profileImage.domain.QProfileImage;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+import static com.ktb.member.domain.QMember.member;
+import static com.ktb.post.domain.QPost.post;
+import static com.ktb.profileImage.domain.QProfileImage.profileImage;
 
 @Slf4j
 @Repository
@@ -20,37 +26,64 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 
     @Override
     public PostResponse.DetailPostResponse findPostDetailByPostId(Long postId, Long memberId) {
-        try {
-            PostResponse.DetailPostResponse response = jpaQueryFactory.select(
-                            Projections.constructor(
-                                    PostResponse.DetailPostResponse.class,
-                                    QPost.post.id,
-                                    QPost.post.title,
-                                    QPost.post.content,
-                                    QPost.post.viewCount,
-                                    QPost.post.likeCount,
-                                    QPost.post.commentCount,
-                                    QPost.post.createdAt,
-                                    QPost.post.updatedAt,
-                                    QPost.post.member.id.eq(memberId),
-                                    Projections.constructor(
-                                            PostResponse.AuthorResponse.class,
-                                            QMember.member.id,
-                                            QMember.member.nickname
-                                    )
-                            )
-                    )
-                    .from(QPost.post)
-                    .join(QPost.post.member, QMember.member)
-                    .where(
-                            QPost.post.id.eq(postId),
-                            QPost.post.deletedAt.isNull()
-                    )
-                    .fetchOne();
-            return response;
-        } catch (Exception e) {
-            log.error(String.valueOf(e));
-        }
-        return null;
+        PostResponse.DetailPostResponse response = jpaQueryFactory.select(
+                        Projections.constructor(
+                                PostResponse.DetailPostResponse.class,
+                                QPost.post.id,
+                                QPost.post.title,
+                                QPost.post.content,
+                                QPost.post.viewCount,
+                                QPost.post.likeCount,
+                                QPost.post.commentCount,
+                                QPost.post.createdAt,
+                                QPost.post.updatedAt,
+                                QPost.post.member.id.eq(memberId),
+                                Projections.constructor(
+                                        PostResponse.AuthorResponse.class,
+                                        QMember.member.id,
+                                        QMember.member.nickname,
+                                        QProfileImage.profileImage.storedPath
+                                )
+                        )
+                )
+                .from(QPost.post)
+                .join(QPost.post.member, QMember.member)
+                .leftJoin(QProfileImage.profileImage)
+                .on(QProfileImage.profileImage.member.id.eq(QMember.member.id))
+                .where(
+                        QPost.post.id.eq(postId),
+                        QPost.post.deletedAt.isNull()
+                )
+                .fetchOne();
+        return response;
+    }
+
+    @Override
+    public List<PostResponse.PostSummaryResult> findPostSummaryResultByCursor(Long cursor, int limit) {
+        return jpaQueryFactory.select(
+                        Projections.constructor(
+                                PostResponse.PostSummaryResult.class,
+                                QPost.post.id,
+                                QPost.post.title,
+                                QPost.post.createdAt,
+                                QPost.post.likeCount,
+                                QPost.post.commentCount,
+                                QPost.post.viewCount,
+                                Projections.constructor(
+                                        PostResponse.AuthorResponse.class,
+                                        QMember.member.id,
+                                        QMember.member.nickname,
+                                        QProfileImage.profileImage.storedPath
+                                )
+                        )
+                )
+                .from(QPost.post)
+                .join(QPost.post.member, QMember.member)
+                .leftJoin(QProfileImage.profileImage)
+                .on(QProfileImage.profileImage.member.id.eq(QMember.member.id))
+                .where(cursor != null ? post.id.lt(cursor) : null)
+                .orderBy(QPost.post.id.desc())
+                .limit(limit)
+                .fetch();
     }
 }

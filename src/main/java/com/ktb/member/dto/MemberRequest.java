@@ -8,26 +8,26 @@ import lombok.Getter;
 
 public class MemberRequest {
 
-    @Getter
-    public static class SignUpRequest {
+        @Getter
+        public static class SignUpRequest {
 
-        @NotBlank
-        @Email
-        private String email;
+            @NotBlank
+            @Email
+            private String email;
 
-        @NotBlank
-        private String password;
+            @NotBlank
+            private String password;
 
-        @NotBlank
-        private String passwordCheck;
+//            @NotBlank
+//            private String passwordCheck;
 
-        @NotBlank
-        @Size(max = 10)
-        private String nickname;
+            @NotBlank
+            @Size(max = 10)
+            private String nickname;
 
-        @Valid
-        private UploadFile uploadFile;
-    }
+            @Valid
+            private UploadFile uploadFile;
+        }
 
     @Getter
     public static class LoginRequest {

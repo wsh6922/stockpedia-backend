@@ -207,4 +207,26 @@ public class MemberController {
                 .status(HttpStatus.OK)
                 .body(ApiResponse.success("로그아웃", null));
     }
+
+    @GetMapping("/users/email/check")
+    public ResponseEntity<ApiResponse<Void>> checkEmail(
+            @RequestParam String email
+    ) {
+        memberService.checkEmail(email);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiResponse.success("사용 가능한 이메일입니다.", null));
+    }
+
+    @GetMapping("/users/nickname/check")
+    public ResponseEntity<ApiResponse<Void>> checkNickname(
+            @RequestParam String nickname
+    ) {
+        memberService.checkNickname(nickname);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiResponse.success("사용 가능한 이메일입니다.", null));
+    }
 }

@@ -11,14 +11,10 @@ public class FileResponse {
     @AllArgsConstructor
     public static class UploadResponse {
 
-        private String originalFileName;
+        private String originalName;
 
-        private String storeFileUrl;
-    }
-
-    @Getter
-    @AllArgsConstructor
-    public static class UploadsResponse {
-        private List<UploadResponse> files;
+        private String storedPath;
+        
+        private String s3Key;
     }
 }

@@ -45,6 +45,8 @@ public enum ErrorCode {
 
     POST_DELETE_ACCESS_FORBIDDEN(HttpStatus.FORBIDDEN, HttpStatus.FORBIDDEN.value(), "게시글 삭제 권한이 없습니다."),
 
+    POST_UPDATE_EMPTY(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), "수정할 정보가 없습니다."),
+
 
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value(), "존재하지 않는 댓글입니다"),
 
@@ -60,9 +62,10 @@ public enum ErrorCode {
 
     FILE_REQUIRED(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), "파일을 첨부해주세요."),
 
-    INVALID_FILE_NAME(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), "유효하지 않은 파일명입니다.")
+    INVALID_FILE_NAME(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), "유효하지 않은 파일명입니다."),
 
-    ;
+    INVALID_PAGE_SIZE(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), "페이지 크기가 올바르지 않습니다");
+
 
     private final HttpStatus status;
 

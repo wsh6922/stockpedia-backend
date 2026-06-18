@@ -57,8 +57,11 @@ public class Post extends SoftDeleteEntity {
         this.commentCount = commentCount;
     }
 
-    public void update(String title, String content) {
+    public void changeTitle(String title) {
         this.title = title;
+    }
+
+    public void changeContent(String content) {
         this.content = content;
     }
 

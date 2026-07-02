@@ -166,7 +166,7 @@ public class MemberService {
             throw new BusinessException(ErrorCode.USER_NOT_FOUND);
         }
 
-        if (mu.getNickname() == null && mu.getUploadFile() == null) {
+        if (mu.getNickname() == null && mu.getUploadFile() == null && !mu.isRemoveImage()) {
             throw new BusinessException(ErrorCode.USER_UPDATE_EMPTY);
         }
 
@@ -180,7 +180,7 @@ public class MemberService {
 
         String profileImageUrl = null;
 
-        if (mu.getUploadFile() != null) { // 새로운 이미지가 있다는 거임
+        if (mu.getUploadFile() != null) {
             ProfileImage profileImage = profileImageRepository.findByMemberId(member.getId());
 
             if (profileImage == null) {
@@ -199,6 +199,9 @@ public class MemberService {
 
                 profileImageUrl = profileImage.getStoredPath();
             }
+        } else if (mu.isRemoveImage()) {
+            profileImageRepository.deleteByMemberId(member.getId());
+            profileImageUrl = null;
         }
 
         return new MemberResponse.UpdateProfileResponse(

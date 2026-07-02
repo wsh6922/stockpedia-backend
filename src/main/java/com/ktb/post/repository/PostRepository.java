@@ -4,10 +4,15 @@ import com.ktb.post.domain.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface PostRepository extends JpaRepository<Post, Long>, PostRepositoryCustom {
 
-    Post findPostById(Long id);
+    Post findByIdAndDeletedAtIsNull(Long id);
+
+    @Modifying
+    @Query("update Post p set p.viewCount = p.viewCount + :delta where p.id = :id")
+    void incrementViewCount(@Param("id") Long id, @Param("delta") Long delta);
 
     /**
      * 도메인 메소드를 사용해서 객체 상태를 바꿔 JPA의 dirty checking으로 UPDATE가 나가면
@@ -16,16 +21,15 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostRepositor
      * 카운터는 JPQL, QueryDSL로 해결 할 수 있고 나아가 Redis도 사용할 수 있음
      */
     @Modifying
-    @Query("update Post p set p.viewCount = p.viewCount + 1 where p.id = :id")
-    void incrementViewCount(Long id);
-
-    @Modifying
     @Query("update Post p set p.likeCount = p.likeCount + 1 where p.id = :id")
     void incrementLikeCount(Long id);
 
     @Modifying
     @Query("update Post p set p.likeCount = p.likeCount - 1 where p.id = :id")
     void decrementLikeCount(Long id);
+
+    @Query("select p.likeCount from Post p where p.id = :id")
+    Long findLikeCountById(Long id);
 
     @Modifying
     @Query("update Post p set p.commentCount = p.commentCount + 1 where p.id = :id")

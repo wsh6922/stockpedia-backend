@@ -46,6 +46,8 @@ public class MemberRequest {
         private String nickname;
 
         private UploadFile uploadFile;
+
+        private boolean removeImage;
     }
 
     @Getter

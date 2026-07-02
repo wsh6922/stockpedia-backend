@@ -26,7 +26,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                 ))
                 .from(QMember.member)
                 .leftJoin(QProfileImage.profileImage)
-                .on(QProfileImage.profileImage.id.eq(QMember.member.id))
+                .on(QProfileImage.profileImage.member.id.eq(QMember.member.id))
                 .where(QMember.member.id.eq(id))
                 .fetchOne();
 

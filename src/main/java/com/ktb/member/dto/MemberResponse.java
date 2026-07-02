@@ -31,9 +31,9 @@ public class MemberResponse {
 
         private Long id;
 
-        private String nickname;
-
         private String email;
+
+        private String nickname;
 
         private String profileImageUrl;
     }

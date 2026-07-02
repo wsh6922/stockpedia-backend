@@ -68,6 +68,7 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
                 .on(QProfileImage.profileImage.member.id.eq(QMember.member.id))
                 .where(
                         QComment.comment.post.id.eq(postId),
+                        QComment.comment.deletedAt.isNull(),
                         cursor == null ? null : QComment.comment.id.lt(cursor)
                 )
                 .orderBy(QComment.comment.id.desc())

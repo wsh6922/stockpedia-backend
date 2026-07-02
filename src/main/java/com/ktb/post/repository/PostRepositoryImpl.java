@@ -3,6 +3,7 @@ package com.ktb.post.repository;
 import com.ktb.member.domain.QMember;
 import com.ktb.post.domain.QPost;
 import com.ktb.post.dto.PostResponse;
+import com.ktb.postlike.domain.QPostLike;
 import com.ktb.profileImage.domain.QProfileImage;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -38,6 +39,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                                 QPost.post.createdAt,
                                 QPost.post.updatedAt,
                                 QPost.post.member.id.eq(memberId),
+                                QPostLike.postLike.member.id.isNotNull(),
                                 Projections.constructor(
                                         PostResponse.AuthorResponse.class,
                                         QMember.member.id,
@@ -50,6 +52,9 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .join(QPost.post.member, QMember.member)
                 .leftJoin(QProfileImage.profileImage)
                 .on(QProfileImage.profileImage.member.id.eq(QMember.member.id))
+                .leftJoin(QPostLike.postLike)
+                .on(QPostLike.postLike.post.id.eq(QPost.post.id)
+                        .and(QPostLike.postLike.member.id.eq(memberId)))
                 .where(
                         QPost.post.id.eq(postId),
                         QPost.post.deletedAt.isNull()
@@ -81,7 +86,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .join(QPost.post.member, QMember.member)
                 .leftJoin(QProfileImage.profileImage)
                 .on(QProfileImage.profileImage.member.id.eq(QMember.member.id))
-                .where(cursor != null ? post.id.lt(cursor) : null)
+                .where(cursor != null ? post.id.lt(cursor) : null, QPost.post.deletedAt.isNull())
                 .orderBy(QPost.post.id.desc())
                 .limit(limit)
                 .fetch();

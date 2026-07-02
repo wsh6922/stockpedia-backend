@@ -36,7 +36,6 @@ public class PostResponse {
     }
 
     @Getter
-    @AllArgsConstructor
     public static class DetailPostResponse {
 
         private Long postId;
@@ -57,7 +56,33 @@ public class PostResponse {
 
         private Boolean isMine;
 
+        private Boolean isLiked;
+
         private AuthorResponse author;
+
+        private List<String> imageUrls;
+
+        public DetailPostResponse(Long postId, String title, String content, Long viewCount, Long likeCount, Long commentCount, LocalDateTime createdAt, LocalDateTime updatedAt, Boolean isMine, Boolean isLiked, AuthorResponse author) {
+            this.postId = postId;
+            this.title = title;
+            this.content = content;
+            this.viewCount = viewCount;
+            this.likeCount = likeCount;
+            this.commentCount = commentCount;
+            this.createdAt = createdAt;
+            this.updatedAt = updatedAt;
+            this.isMine = isMine;
+            this.isLiked = isLiked;
+            this.author = author;
+        }
+
+        public void setImageUrls(List<String> imageUrls) {
+            this.imageUrls = imageUrls;
+        }
+
+        public void setViewCount(Long viewCount) {
+            this.viewCount = viewCount;
+        }
     }
 
     @Getter

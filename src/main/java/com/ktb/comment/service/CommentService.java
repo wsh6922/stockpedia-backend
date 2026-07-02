@@ -31,7 +31,7 @@ public class CommentService {
     public CommentResponse.CreateCommentResponse createComment(
             Long postId, Long currentMemberId, String content) {
 
-        Post post = postRepository.findPostById(postId);
+        Post post = postRepository.findByIdAndDeletedAtIsNull(postId);
 
         if (post == null) {
             throw new BusinessException(ErrorCode.POST_NOT_FOUND);
@@ -86,13 +86,13 @@ public class CommentService {
     public CommentResponse.UpdateCommentResponse updateComment(
             Long postId, Long currentMemberId, Long commentId, String content) {
 
-        Post post = postRepository.findPostById(postId);
+        Post post = postRepository.findByIdAndDeletedAtIsNull(postId);
 
         if (post == null) {
             throw new BusinessException(ErrorCode.POST_NOT_FOUND);
         }
 
-        Comment comment = commentRepository.findCommentById(commentId);
+        Comment comment = commentRepository.findByIdAndDeletedAtIsNull(commentId);
 
         if (comment == null) {
             throw new BusinessException(ErrorCode.COMMENT_NOT_FOUND);
@@ -112,13 +112,13 @@ public class CommentService {
     @Transactional
     public void deleteComment(Long postId, Long currentMemberId, Long commentId) {
 
-        Post post = postRepository.findPostById(postId);
+        Post post = postRepository.findByIdAndDeletedAtIsNull(postId);
 
         if (post == null) {
             throw new BusinessException(ErrorCode.POST_NOT_FOUND);
         }
 
-        Comment comment = commentRepository.findCommentById(commentId);
+        Comment comment = commentRepository.findByIdAndDeletedAtIsNull(commentId);
 
         if (comment == null || !comment.getPost().getId().equals(postId)) {
             throw new BusinessException(ErrorCode.COMMENT_NOT_FOUND);
@@ -128,8 +128,7 @@ public class CommentService {
             throw new BusinessException(ErrorCode.COMMENT_DELETE_ACCESS_FORBIDDEN);
         }
 
-        commentRepository.deleteById(commentId);
-
+        comment.softDelete();
         postRepository.decrementCommentCount(post.getId());
     }
 }

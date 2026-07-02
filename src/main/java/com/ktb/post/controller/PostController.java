@@ -44,7 +44,7 @@ public class PostController {
                 .status(HttpStatus.OK)
                 .body(ApiResponse.success(postId + "번 게시글 조회에 성공했습니다.", response));
     }
-
+    
     @GetMapping("/posts")
     public ResponseEntity<ApiResponse<PostResponse.PostPageResponse>> getPosts(
             @RequestParam(required = false) Long cursor,

@@ -71,7 +71,7 @@ public class CommentResponse {
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime createdAt;
 
-        private boolean isMine;
+        private Boolean isMine;
 
         private AuthorCursorResponse author;
     }

@@ -1,6 +1,7 @@
 package com.ktb.postImage.domain;
 
 import com.ktb.global.utils.entity.BaseEntity;
+import com.ktb.global.utils.entity.SoftDeleteEntity;
 import com.ktb.post.domain.Post;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "post_image")
-public class PostImage extends BaseEntity {
+public class PostImage extends SoftDeleteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

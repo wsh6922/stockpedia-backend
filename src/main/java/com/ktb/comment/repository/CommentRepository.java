@@ -5,6 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CommentRepository extends JpaRepository<Comment, Long>, CommentRepositoryCustom {
 
-
-    Comment findCommentById(Long commentId);
+    Comment findByIdAndDeletedAtIsNull(Long commentId);
 }

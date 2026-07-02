@@ -147,6 +147,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handleException(
             Exception e
     ) {
+        log.error(e + "");
         String code = String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value());
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)

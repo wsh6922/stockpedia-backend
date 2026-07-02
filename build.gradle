@@ -54,6 +54,22 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.session:spring-session-data-redis'
+
+    // Spring Cache
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+
+    // Actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // Micrometer Prometheus
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+
+    // p6spy
+    implementation "com.github.gavlyukovskiy:p6spy-spring-boot-starter:2.0.1"
 }
 
 tasks.named('test') {

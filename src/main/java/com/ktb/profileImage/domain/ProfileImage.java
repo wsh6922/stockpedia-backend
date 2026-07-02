@@ -1,5 +1,6 @@
 package com.ktb.profileImage.domain;
 import com.ktb.global.utils.entity.BaseEntity;
+import com.ktb.global.utils.entity.SoftDeleteEntity;
 import com.ktb.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.Getter;

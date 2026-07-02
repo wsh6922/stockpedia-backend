@@ -33,7 +33,7 @@ public class PostLikeService {
     @Transactional
     public PostLikeResponse createPostLike(Long postId, Long currentMemberId) {
 
-        Post post = postRepository.findPostById(postId);
+        Post post = postRepository.findByIdAndDeletedAtIsNull(postId);
 
         if (post == null) {
             throw new BusinessException(ErrorCode.POST_NOT_FOUND);
@@ -60,16 +60,18 @@ public class PostLikeService {
 
         postRepository.incrementLikeCount(post.getId());
 
+        Long likeCount = postRepository.findLikeCountById(post.getId());
+
         return new PostLikeResponse(postId,
                 currentMemberId,
-                post.getLikeCount(),
+                likeCount,
                 true);
     }
 
     @Transactional
     public PostLikeResponse deletePostLike(Long postId, Long currentMemberId) {
 
-        Post post = postRepository.findPostById(postId);
+        Post post = postRepository.findByIdAndDeletedAtIsNull(postId);
 
         if (post == null) {
             throw new BusinessException(ErrorCode.POST_NOT_FOUND);
@@ -94,9 +96,11 @@ public class PostLikeService {
         postLikeRepository.delete(postLike);
         postRepository.decrementLikeCount(post.getId());
 
+        Long likeCount = postRepository.findLikeCountById(post.getId());
+
         return new PostLikeResponse(postId,
                 currentMemberId,
-                post.getLikeCount(),
+                likeCount,
                 false);
     }
 }

@@ -29,6 +29,8 @@ public class PostService {
 
     private final PostImageRepository postImageRepository;
 
+    private final PostViewCountService postViewCountService;
+
     @Transactional
     public Post createPost(Long currentMemberId, PostRequest.CreatePostRequest pc) {
 
@@ -64,22 +66,36 @@ public class PostService {
         return savedPost;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public PostResponse.DetailPostResponse getPostDetail(Long postId, Long currentMemberId) {
 
-        Post post = postRepository.findPostById(postId);
+        Post post = postRepository.findByIdAndDeletedAtIsNull(postId);
 
         if (post == null) {
             throw new BusinessException(ErrorCode.POST_NOT_FOUND);
         }
-
-        postRepository.incrementViewCount(post.getId());
 
         PostResponse.DetailPostResponse response = postRepository.findPostDetailByPostId(post.getId(), currentMemberId);
 
         if (response == null) {
             throw new BusinessException(ErrorCode.POST_NOT_FOUND);
         }
+
+        Long delta = postViewCountService.increaseView(post.getId(), currentMemberId);
+
+        Long totalViewCount = post.getViewCount() + delta;
+
+        response.setViewCount(totalViewCount);
+
+        List<String> imageUrls = new ArrayList<>();
+
+        List<PostImage> postImages = postImageRepository.findByPostId(post.getId());
+
+        for (PostImage postImage : postImages) {
+            imageUrls.add(postImage.getStoredPath());
+        }
+
+        response.setImageUrls(imageUrls);
 
         return response;
     }
@@ -113,7 +129,7 @@ public class PostService {
     @Transactional
     public PostResponse.UpdatePostResponse updatePost(Long postId, Long currentMemberId, PostRequest.UpdatePostRequest pu) {
 
-        Post post = postRepository.findPostById(postId);
+        Post post = postRepository.findByIdAndDeletedAtIsNull(postId);
 
         if (post == null) {
             throw new BusinessException(ErrorCode.POST_NOT_FOUND);
@@ -123,7 +139,7 @@ public class PostService {
             throw new BusinessException(ErrorCode.POST_UPDATE_ACCESS_FORBIDDEN);
         }
 
-        if (pu.getTitle() == null && pu.getContent() == null && pu.getUploadFiles() == null) {
+        if (pu.getTitle() == null && pu.getContent() == null && (pu.getUploadFiles() == null || pu.getUploadFiles().isEmpty())) {
             throw new BusinessException(ErrorCode.POST_UPDATE_EMPTY);
         }
 
@@ -137,8 +153,7 @@ public class PostService {
 
         List<String> imageUrls = null;
 
-        if (pu.getUploadFiles() != null) {
-            postImageRepository.deleteByPostId(post.getId());
+        if (pu.getUploadFiles() != null && !pu.getUploadFiles().isEmpty()) {
             imageUrls = new ArrayList<>();
             for (UploadFile file : pu.getUploadFiles()) {
                 PostImage postImage = new PostImage(
@@ -162,7 +177,7 @@ public class PostService {
     @Transactional
     public void deletePost(Long postId, Long currentMemberId) {
 
-        Post post = postRepository.findPostById(postId);
+        Post post = postRepository.findByIdAndDeletedAtIsNull(postId);
 
         if (post == null) {
             throw new BusinessException(ErrorCode.POST_NOT_FOUND);
@@ -172,8 +187,6 @@ public class PostService {
             throw new BusinessException(ErrorCode.POST_UPDATE_ACCESS_FORBIDDEN);
         }
 
-        postImageRepository.deleteByPostId(postId);
-
-        postRepository.deleteById(postId);
+        post.softDelete();
     }
 }

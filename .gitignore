@@ -1,4 +1,4 @@
-uploads
+# uploads
 
 HELP.md
 .gradle
@@ -37,3 +37,20 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Environment variables ###
+.env
+.env.*
+
+### Local config ###
+application-local.yml
+
+### Logs ###
+logs/
+*.log
+
+### Uploaded files ###
+uploads/
+
+### OS ###
+.DS_Store

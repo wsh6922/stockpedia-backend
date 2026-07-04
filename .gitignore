@@ -54,3 +54,5 @@ uploads/
 
 ### OS ###
 .DS_Store
+
+*.pem

@@ -19,5 +19,10 @@ spring:
       password: ${REDIS_PASSWORD}
 
 
+  logging:
+    file:
+      name: /home/ubuntu/KTB/logs/backend.log
+
+
   server:
     forward-headers-strategy: framework

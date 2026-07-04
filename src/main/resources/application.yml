@@ -2,10 +2,8 @@ spring:
   application:
     name: KTB
 
-
   profiles:
     active: local
-
 
   config:
     import: application-redis.yml

@@ -11,18 +11,10 @@ spring:
       ddl-auto: ${DDL_AUTO:validate}
     show-sql: false
 
-
-  data:
-    redis:
-      host: ${REDIS_HOST:localhost}
-      port: ${REDIS_PORT:6379}
-      password: ${REDIS_PASSWORD}
+logging:
+  file:
+    name: /home/ubuntu/KTB/logs/backend.log
 
 
-  logging:
-    file:
-      name: /home/ubuntu/KTB/logs/backend.log
-
-
-  server:
-    forward-headers-strategy: framework
+server:
+  forward-headers-strategy: framework

@@ -5,8 +5,17 @@ spring:
   profiles:
     active: local
 
-  config:
-    import: application-redis.yml
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+  session:
+    store-type: redis
+    timeout: 30m
+    redis:
+      namespace: ktb:session
 
 
   jpa:

@@ -4,6 +4,7 @@ import com.ktb.global.utils.exception.BusinessException;
 import com.ktb.global.utils.exception.ErrorCode;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +21,7 @@ import java.util.UUID;
  * @Service보다 @Component가 의미상 더 맞다고 판단
  * 프로필 전용으로 책임을 좁힘
  */
+@Profile("local")
 @Component
 public class LocalFileStorage implements FileStorage {
 

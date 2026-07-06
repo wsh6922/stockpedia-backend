@@ -28,7 +28,7 @@ public class FileController {
         String storeFileUrl = fileStorage.storeFile(file, "profiles");
 
         FileResponse.UploadResponse response =
-                new FileResponse.UploadResponse(file.getOriginalFilename(), storeFileUrl, "LOCAL");
+                new FileResponse.UploadResponse(file.getOriginalFilename(), storeFileUrl, "null");
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -45,8 +45,9 @@ public class FileController {
 
         for (MultipartFile file : files) {
             String storeFileUrl = fileStorage.storeFile(file, "posts");
+
             FileResponse.UploadResponse response =
-                    new FileResponse.UploadResponse(file.getOriginalFilename(), storeFileUrl,"LOCAL");
+                    new FileResponse.UploadResponse(file.getOriginalFilename(), storeFileUrl, "null");
             result.add(response);
         }
 

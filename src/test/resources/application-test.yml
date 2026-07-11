@@ -17,3 +17,6 @@ spring:
 aws:
   s3:
     bucket: test-bucket
+
+file:
+  upload-path: uploads

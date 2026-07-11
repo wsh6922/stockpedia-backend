@@ -21,7 +21,7 @@ import java.util.UUID;
  * @Service보다 @Component가 의미상 더 맞다고 판단
  * 프로필 전용으로 책임을 좁힘
  */
-@Profile("local")
+@Profile({"local", "test"})
 @Component
 public class LocalFileStorage implements FileStorage {
 

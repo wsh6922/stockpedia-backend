@@ -34,8 +34,8 @@ jobs:
       - name: 테스트 DB 컨테이너 실행
         run: docker compose -f github-actions-docker-db.yml up -d --wait --wait-timeout 60
 
-      - name: 테스트 실행
-        run: ./gradlew test --no-daemon
+      - name: 통합 테스트 실행
+        run: ./gradlew integrationTest --no-daemon
 
       - name: 테스트 컨테이너 정리
         if: always()

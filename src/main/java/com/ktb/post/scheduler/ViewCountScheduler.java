@@ -17,7 +17,7 @@ public class ViewCountScheduler {
 
     private final PostRepository postRepository;
 
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(fixedDelay = 30000)
     @Transactional
     public void synchronizeViewCount() {
         ScanOptions options = ScanOptions.scanOptions()

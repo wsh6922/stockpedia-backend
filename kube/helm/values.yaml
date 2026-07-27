@@ -60,9 +60,18 @@ quota:
 
 # --- LimitRange ---
 limitRange:
+  min:
+    cpu: "100m"
+    memory: "128Mi"
   max:
     cpu: "1200m"
     memory: "1Gi"
+  defaultRequest:
+    cpu: "100m"
+    memory: "128Mi"
+  default:
+    cpu: "250m"
+    memory: "256Mi"
 
 # --- Ingress ---
 ingress:
@@ -77,91 +86,9 @@ strategy:
 affinity:
   weight: 100
 
-#image:
-#  repository: nginx
-#  pullPolicy: IfNotPresent
-#  tag: ""
-#
-#imagePullSecrets: []
-#
-#nameOverride: ""
-#fullnameOverride: ""
-#
-#serviceAccount:
-#  create: true
-#  automount: true
-#  annotations: {}
-#  name: ""
-#
-#podAnnotations: {}
-#
-#podLabels: {}
-#
-#podSecurityContext: {}
-#
-#securityContext: {}
-#
-#service:
-#  type: ClusterIP
-#  port: 80
-#
-#ingress:
-#  enabled: false
-#  className: ""
-#  annotations: {}
-#  hosts:
-#    - host: chart-example.local
-#      paths:
-#        - path: /
-#          pathType: ImplementationSpecific
-#  tls: []
-#
-#httpRoute:
-#  enabled: false
-#  annotations: {}
-#
-#  parentRefs:
-#    - name: gateway
-#      sectionName: http
-#
-#  hostnames:
-#    - chart-example.local
-#
-#  rules:
-#    - matches:
-#        - path:
-#            type: PathPrefix
-#            value: /headers
-#
-#
-#resources: {}
-#
-#
-#livenessProbe:
-#  httpGet:
-#    path: /
-#    port: http
-#
-#
-#readinessProbe:
-#  httpGet:
-#    path: /
-#    port: http
-#
-#
-#autoscaling:
-#  enabled: false
-#  minReplicas: 1
-#  maxReplicas: 100
-#  targetCPUUtilizationPercentage: 80
-#
-#
-#volumes: []
-#
-#volumeMounts: []
-#
-#nodeSelector: {}
-#
-#tolerations: []
-#
-#affinity: {}
+# --- namespace ---
+namespace: prod
+
+# --- service type ---
+service:
+  type: ClusterIP

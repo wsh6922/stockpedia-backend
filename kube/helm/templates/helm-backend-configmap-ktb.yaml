@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-backend-ktb
+  namespace: {{ .Values.namespace }}
+data:
+  {{- toYaml .Values.config | nindent 2 }}

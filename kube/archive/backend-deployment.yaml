@@ -33,6 +33,7 @@ spec:
         tier: backend
         env: prod
     spec:
+      serviceAccountName: serviceaccount-backend-ktb
       affinity:
         # Pod 배치 규칙
         podAntiAffinity:

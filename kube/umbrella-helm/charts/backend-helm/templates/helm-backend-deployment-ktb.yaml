@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: deployment-backend-ktb
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Release.Namespace }}
   labels:
     env: prod
     team: backend
@@ -26,6 +26,7 @@ spec:
         tier: backend
         env: prod
     spec:
+      serviceAccountName: serviceaccount-backend-ktb
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:

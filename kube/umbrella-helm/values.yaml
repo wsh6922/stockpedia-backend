@@ -56,7 +56,18 @@ backend:
 
   # --- service type ---
   service:
-    type: ClusterIP
+    type: NodePort
+    externalTrafficPolicy: Cluster
 
   # --- 컨테이너 포트 ---
   containerPort: 8080
+
+  # --- ingress (ALB) ---
+  ingress:
+    className: alb
+    scheme: internet-facing
+    targetType: instance
+    certificateArn: "arn:aws:acm:ap-northeast-2:925663248026:certificate/34de2909-4e90-4241-a7f2-5f612777dc43"
+    healthcheckPath: /actuator/health/readiness
+    subnets: "subnet-06412b28d73f82e7c, subnet-01a255286aa892328"
+    host: www.shiftknu.com

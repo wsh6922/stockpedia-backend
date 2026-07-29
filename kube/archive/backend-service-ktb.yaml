@@ -5,6 +5,7 @@ metadata:
   namespace: prod
 spec:
   type: ClusterIP
+  externalTrafficPolicy: Cluster
   selector:
     app: ktb
     tier: backend
